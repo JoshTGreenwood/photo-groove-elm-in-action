@@ -1,11 +1,12 @@
 module App exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (id, src, class)
+import Html.Attributes exposing (id, src, class, classList)
 
 
 type alias Model =
     { photos : List Photo
+    , selectedPhotoUrl : String
     }
 
 
@@ -20,6 +21,7 @@ init =
         , (Photo "2.jpeg")
         , (Photo "3.jpeg")
         ]
+        "1.jpeg"
     )
         ! []
 
@@ -38,7 +40,7 @@ view model =
     div [ class "content" ]
         [ h1 [] []
         , div [ id "thumbnails" ]
-            (List.map viewThumbnail model.photos)
+            (List.map (\photo -> viewThumbnail photo model.selectedPhotoUrl) model.photos)
         ]
 
 
@@ -47,9 +49,9 @@ photoPrefix =
     "http://elm-in-action.com/"
 
 
-viewThumbnail : Photo -> Html Msg
-viewThumbnail photo =
-    img [ src (photoPrefix ++ photo.url) ] []
+viewThumbnail : Photo -> String -> Html Msg
+viewThumbnail photo selectedPhotoUrl =
+    img [ src (photoPrefix ++ photo.url), classList [ ( "selected", photo.url == selectedPhotoUrl ) ] ] []
 
 
 subscriptions : Model -> Sub Msg
