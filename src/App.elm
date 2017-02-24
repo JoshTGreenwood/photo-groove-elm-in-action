@@ -38,9 +38,10 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div [ class "content" ]
-        [ h1 [] []
+        [ h1 [] [ text "Photo Groove" ]
         , div [ id "thumbnails" ]
             (List.map (\photo -> viewThumbnail photo model.selectedPhotoUrl) model.photos)
+        , img [ class "large", src (photoPrefix ++ "1.jpeg") ] []
         ]
 
 
