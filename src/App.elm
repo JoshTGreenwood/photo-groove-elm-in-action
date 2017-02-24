@@ -5,14 +5,23 @@ import Html.Attributes exposing (id, src, class)
 
 
 type alias Model =
-    { message : String
-    , logo : String
+    { photos : List Photo
     }
 
 
-init : String -> ( Model, Cmd Msg )
-init path =
-    ( { message = "Photo Groove", logo = path }, Cmd.none )
+type alias Photo =
+    { url : String }
+
+
+init : ( Model, Cmd Msg )
+init =
+    (Model
+        [ (Photo "1.jpeg")
+        , (Photo "2.jpeg")
+        , (Photo "3.jpeg")
+        ]
+    )
+        ! []
 
 
 type Msg
@@ -27,13 +36,20 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div [ class "content" ]
-        [ h1 [] [ text model.message ]
+        [ h1 [] []
         , div [ id "thumbnails" ]
-            [ img [ src "http://elm-in-action.com/1.jpeg" ] []
-            , img [ src "http://elm-in-action.com/2.jpeg" ] []
-            , img [ src "http://elm-in-action.com/3.jpeg" ] []
-            ]
+            (List.map viewThumbnail model.photos)
         ]
+
+
+photoPrefix : String
+photoPrefix =
+    "http://elm-in-action.com/"
+
+
+viewThumbnail : Photo -> Html Msg
+viewThumbnail photo =
+    img [ src (photoPrefix ++ photo.url) ] []
 
 
 subscriptions : Model -> Sub Msg
