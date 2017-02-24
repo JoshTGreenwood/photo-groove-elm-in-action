@@ -2,6 +2,7 @@ module App exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (id, src, class, classList)
+import Html.Events exposing (onClick)
 
 
 type alias Model =
@@ -27,12 +28,14 @@ init =
 
 
 type Msg
-    = NoOp
+    = PhotoClicked Photo
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        PhotoClicked photo ->
+            { model | selectedPhotoUrl = photo.url } ! []
 
 
 view : Model -> Html Msg
@@ -41,7 +44,7 @@ view model =
         [ h1 [] [ text "Photo Groove" ]
         , div [ id "thumbnails" ]
             (List.map (viewThumbnail model.selectedPhotoUrl) model.photos)
-        , img [ class "large", src (photoPrefix ++ "1.jpeg") ] []
+        , img [ class "large", src (photoPrefix ++ model.selectedPhotoUrl) ] []
         ]
 
 
@@ -52,7 +55,12 @@ photoPrefix =
 
 viewThumbnail : String -> Photo -> Html Msg
 viewThumbnail selectedPhotoUrl photo =
-    img [ src (photoPrefix ++ photo.url), classList [ ( "selected", photo.url == selectedPhotoUrl ) ] ] []
+    img
+        [ src (photoPrefix ++ photo.url)
+        , classList [ ( "selected", photo.url == selectedPhotoUrl ) ]
+        , onClick (PhotoClicked photo)
+        ]
+        []
 
 
 subscriptions : Model -> Sub Msg
