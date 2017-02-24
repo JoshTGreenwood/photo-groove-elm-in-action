@@ -40,7 +40,7 @@ view model =
     div [ class "content" ]
         [ h1 [] [ text "Photo Groove" ]
         , div [ id "thumbnails" ]
-            (List.map (\photo -> viewThumbnail photo model.selectedPhotoUrl) model.photos)
+            (List.map (viewThumbnail model.selectedPhotoUrl) model.photos)
         , img [ class "large", src (photoPrefix ++ "1.jpeg") ] []
         ]
 
@@ -50,8 +50,8 @@ photoPrefix =
     "http://elm-in-action.com/"
 
 
-viewThumbnail : Photo -> String -> Html Msg
-viewThumbnail photo selectedPhotoUrl =
+viewThumbnail : String -> Photo -> Html Msg
+viewThumbnail selectedPhotoUrl photo =
     img [ src (photoPrefix ++ photo.url), classList [ ( "selected", photo.url == selectedPhotoUrl ) ] ] []
 
 
